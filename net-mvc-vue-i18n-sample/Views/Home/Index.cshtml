@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="app">
+    <div class="text-center">
+        <h1 class="display-4">.NET MVC ft. Vue-i18n sample</h1>
+        <p>{{ $t("hello_world") }}</p>
+        <p>{{ $t("hello_world") }}</p>
+        <p>{{ $t("hello_world") }}</p>
+        <p>{{ $t("only_english") }}</p>
+    </div>
+    
+    <select v-model="chosenLanguage" @@change="switchLocale">
+        <option value="en-us">English</option>
+        <option value="ja-jp">日本語</option>
+        <option value="zh-tw">繁體中文</option>
+    </select>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        const _i18n = VueI18n.createI18n({
+          fallbackLocale: "en-us",
+        })
+
+        const app = Vue.createApp({
+            data: function () {
+                return {
+                    chosenLanguage: "en-us"
+                };
+            },
+            methods: {
+                switchLocale() {
+                    _i18n.global.locale = this.chosenLanguage;
+                }
+            },
+            created() {
+                this.switchLocale();
+                $.get("/resources", (response) => {
+                    for (const [locale, messages] of Object.entries(response)) {
+                      _i18n.global.setLocaleMessage(locale, messages);
+                    }
+                })
+            }
+        });
+        
+        app.use(_i18n);
+        app.mount("#app");
+    </script>
+}
