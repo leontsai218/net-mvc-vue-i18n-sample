@@ -1,14 +1,13 @@
-﻿using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace net_mvc_vue_i18n_sample.ApiControllers;
 
 public class ResourceController : ControllerBase
 {
-    // GET
     [HttpGet("/resources")]
     public Dictionary<string, Dictionary<string, string>> Index()
     {
+        // raw resource can be fetched from database or other data source.
         var rawResources = new List<LanguageResource>()
         {
             new()
@@ -37,6 +36,7 @@ public class ResourceController : ControllerBase
             }, 
         };
         
+        // make locale code as the 1st level key to fit vue-i18n message format.
         return rawResources.GroupBy(r => r.Language)
             .ToDictionary(
                 r => r.Key,

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/net_mvc_vue_i18n_sample.styles.css" asp-append-version="true"/>
     
+    @* introduce vue3 and vue-i18n 9.x *@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/vue-i18n@9"></script>
 </head>
@@ -33,7 +34,7 @@
         </div>
     </nav>
 </header>
-<div class="container" id="app">
+<div id="app" class="container">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
@@ -49,6 +50,8 @@
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 <script type="text/javascript">
+    // setup for vue-i18n and vue instance
+    
     const _i18n = VueI18n.createI18n({
       fallbackLocale: "en-us",
     })
