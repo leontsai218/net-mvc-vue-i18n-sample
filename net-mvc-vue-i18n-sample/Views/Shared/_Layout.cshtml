@@ -33,7 +33,7 @@
         </div>
     </nav>
 </header>
-<div class="container">
+<div class="container" id="app">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
@@ -48,5 +48,34 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+<script type="text/javascript">
+    const _i18n = VueI18n.createI18n({
+      fallbackLocale: "en-us",
+    })
+
+    const app = Vue.createApp({
+        data: function () {
+            return {
+                chosenLanguage: "en-us"
+            };
+        },
+        methods: {
+            switchLocale() {
+                _i18n.global.locale = this.chosenLanguage;
+            }
+        },
+        created() {
+            this.switchLocale();
+            $.get("/resources", (response) => {
+                for (const [locale, messages] of Object.entries(response)) {
+                  _i18n.global.setLocaleMessage(locale, messages);
+                }
+            })
+        }
+    });
+    
+    app.use(_i18n);
+    app.mount("#app");
+</script>
 </body>
 </html>
